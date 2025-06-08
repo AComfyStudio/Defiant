@@ -21,6 +21,7 @@
     {"name":"obj_Ground","order":2,"path":"objects/obj_Ground/obj_Ground.yy",},
     {"name":"obj_Respawn","order":3,"path":"objects/obj_Respawn/obj_Respawn.yy",},
     {"name":"obj_Spikes","order":1,"path":"objects/obj_Spikes/obj_Spikes.yy",},
+    {"name":"spr_Ground_1","order":3,"path":"sprites/spr_Ground_1/spr_Ground_1.yy",},
     {"name":"spr_Ground","order":2,"path":"sprites/spr_Ground/spr_Ground.yy",},
     {"name":"spr_Spikes","order":1,"path":"sprites/spr_Spikes/spr_Spikes.yy",},
     {"name":"ts_Spikes","order":1,"path":"tilesets/ts_Spikes/ts_Spikes.yy",},
