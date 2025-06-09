@@ -12,18 +12,22 @@ dash_time = 10;
 
 canJump = true;
 
+parry_timer = 0;
 
 
 my_tilemap = layer_tilemap_get_id("Tiles_1");
 my_spikemap = layer_tilemap_get_id("Tiles_2")
 
+
+
+//Default state
 StateFree = function()
 {
 
 
 
 //Spike collision
-var collision_found = collision_circle(x, y, 30, my_spikemap, true, false);
+
 
 //Facing directions. 
 var facing = keyboard_check(ord("D")) - keyboard_check(ord("A"));//Determine the direction the player is facing
@@ -53,21 +57,9 @@ if can_dash && dash {
 	
 //Parry input
 if parry{
-	parry_duration = 60; 
-	while parry_duration >= 0 {
-		if collision_found{
-			canJump = false; 
-			can_die = false;
-			alarm[0] = 15;
-			show_debug_message("Parried");
-			dash_direction = point_direction(0, 0, facing, verfacing);
-			dash_speed = dash_distance/dash_time;
-			dash_energy = dash_distance;
-			state = StateParry;
-		}
-	parry_duration --;
-	}
-	show_debug_message("Parry failed")
+	alarm[1] = 1;
+	
+	
 }
 
 //Horizontal collision and movement
