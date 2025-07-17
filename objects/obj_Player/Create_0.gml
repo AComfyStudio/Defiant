@@ -1,20 +1,21 @@
-//Define Player variables and stats
+///Define Player variables and stats
+//Speed and gravity applied on the player
+hsp = 0;
+vsp = 0;
+grv = 0.3;
 
-hsp = 0;//Horizontal speed of the player. 
-vsp = 0;//Vertical speed of the player. 
-grv = 0.5;//Gravity applied on the player. 
-
+//Variables affecting dash and parry
 can_die = true;
 can_dash = false;
 dash_distance = 96;
 dash_time = 10;
-
-
-canJump = true;
-
 parry_timer = 0;
 
+//Variables affecting jump
+canJump = true;
 
+
+//Set the tilemaps to variables
 my_tilemap = layer_tilemap_get_id("Tiles_1");
 my_spikemap = layer_tilemap_get_id("Tiles_2")
 
@@ -28,23 +29,29 @@ StateFree = function()
 
 
 
-//Facing directions. 
+//Facing directions 
 var facing = keyboard_check(ord("D")) - keyboard_check(ord("A"));//Determine the direction the player is facing
 var verfacing = keyboard_check(ord("S")) - keyboard_check(ord("W"));//Determine whether the player is holding up or down.
 
-//Setting horizontal and vertical speed. 
+//Setting horizontal and vertical speed 
 hsp = facing * walk_speed;
+if vsp < 10{
+	vsp = vsp + grv;
+} else {
+	vsp += 5;
+}
 
-vsp = vsp + grv;
 
-	
-if space && canJump{ //Detects the input to jump
+//Jump input
+if space && canJump{
 	show_debug_message("Jump");
 	vsp = -jump;
 	canJump = false; 
+
+
 }
 
-//Dash input. 
+//Dash input 
 if can_dash && dash {
 	can_dash = false;
 	canJump = false; 
@@ -77,6 +84,14 @@ if (place_meeting(x, y + vsp, my_tilemap)){
 	if vsp > 0 {
 		canJump = true;
 		can_dash = true;
+		if (hsp != 0){
+			sprite_index = (spr_Player_run);
+			image_xscale = sign(facing);
+	
+		} else {
+			sprite_index = spr_Player;
+
+		}
 	}
 	
 	while (abs(vsp) > 0.1) {
@@ -85,27 +100,19 @@ if (place_meeting(x, y + vsp, my_tilemap)){
 	}
 	vsp = 0;
 	
+} else {
+	sprite_index = spr_Player_jump;
 }
-
 
 y += vsp;
 
 
 
-//Touching a spike. 
 
-
-	
-
-
-
-
-if (hsp != 0) image_xscale = sign(facing);
 //Flips the direction the player is facing when moving in different directions. 
-//Maps the tilemap to a variable for future reference. 
+
+
 }
-
-
 //Dashing state. 
 StateDash = function() 
 {
@@ -127,31 +134,42 @@ if (place_meeting(x + hsp, y, my_tilemap)){
 
 x += hsp;
 
+
 //Vertical collision and movement. 
 if (place_meeting(x, y + vsp, my_tilemap)){
-	
+	//Slow down the character gradually
 	while (abs(vsp) > 0.1) {
 		vsp *= 0.5; 
+		//If there is no longer a wall, add the reduced speed
 		if (!place_meeting(x, y + vsp, my_tilemap)) y += vsp;
 	}
 	vsp = 0;
 	
 }
 y += vsp;
+
+if can_dash && dash {
+	can_dash = false;
+	canJump = false; 
+	dash_direction = point_direction(0, 0, facing, verfacing);
+	dash_speed = dash_distance/dash_time;
+	dash_energy = dash_distance;
+	state = StateDash;
+}
 	
 	
-	
-	dash_energy -= dash_speed;
-	if dash_energy <= 0{
-		vsp = 0;
-		hsp = 0;
-		state = StateFree;
-	}
+//Ending the dash
+dash_energy -= dash_speed;
+if dash_energy <= 0{
+	state = StateFree;
+	vsp = -1;
+}
 
 
 	
 }
 
+//Parry state
 StateParry = function() 
 {
 	
@@ -183,17 +201,13 @@ if (place_meeting(x, y + vsp, my_tilemap)){
 y += vsp;
 
 //Ending the state
-
 dash_energy -= dash_speed 
 if dash_energy <= 0{
-	vsp = 0;
-	hsp = 0;
 	state = StateFree;
+	vsp = -1;
 }
 
 }
 
 //Sets the state. 
-
-
 state = StateFree;

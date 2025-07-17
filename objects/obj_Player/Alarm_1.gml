@@ -1,10 +1,9 @@
 //Alarm for parry timing
 
 //If a collision is detected from the character. 
-if collision_circle(x, y, 16, my_spikemap, true, false) && parry_timer < 60{
+if collision_circle(x, y, 24, my_spikemap, true, false) && parry_timer < 60{
 		
 	canJump = false; 
-	can_dash = false;
 	alarm[0] = 3;
 	show_debug_message("Parried");
 	dash_direction = point_direction(0, 0, keyboard_check(ord("D")) - keyboard_check(ord("A")) , keyboard_check(ord("S")) - keyboard_check(ord("W")));
@@ -16,6 +15,7 @@ if collision_circle(x, y, 16, my_spikemap, true, false) && parry_timer < 60{
 //When a parry is not met at a certain frame. 
 else {
 	parry_timer ++;
+	show_debug_message(parry_timer);
 	//Reset the alarm
 	if parry_timer <= 60 {
 			alarm[1] = 1;
